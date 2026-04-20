@@ -1,0 +1,32 @@
+# Composer.json for PHP dependencies (Optional)
+# Create if you want to use Composer for dependency management
+
+{
+  "name": "hospital/hospital-management-system",
+  "description": "Hospital Management Information System (HMIS)",
+  "type": "project",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Martin Mbithi Nzilani",
+      "email": "dev@hospital.local"
+    }
+  ],
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.0",
+    "squizlabs/php_codesniffer": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hospital\\": "src/"
+    }
+  },
+  "scripts": {
+    "lint": "phpstan analyse backend/",
+    "sniff": "phpcs --standard=PSR12 backend/",
+    "test": "phpunit"
+  }
+}
