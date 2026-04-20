@@ -77,15 +77,6 @@ chmod +x scripts/quick-start.sh
 # Database: http://localhost:8081
 ```
 
-### Login Credentials
-
-| Role | Email/ID | Password |
-|------|----------|----------|
-| Admin | admin | pramod2004 |
-| Doctor | admin | pramod2004 |
-
-⚠️ **Change these credentials in production!**
-
 ## Deployment Options
 
 ### Option 1: Docker Compose (Recommended for Development)
@@ -130,7 +121,6 @@ Hospital-PHP/
 ├── Dockerfile              # Docker image definition
 ├── docker-compose.yml      # Docker services
 ├── Jenkinsfile             # CI/CD pipeline
-├── .env.example            # Environment variables template
 ├── .gitignore              # Git ignore rules
 ├── DEPLOYMENT_GUIDE.md     # Detailed deployment guide
 ├── QUICK_REFERENCE.md      # Quick command reference
@@ -141,14 +131,13 @@ Hospital-PHP/
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and update:
+Create a `.env` file in the root directory with your configuration:
 
 ```bash
-cp .env.example .env
 nano .env
 ```
 
-Key variables:
+Key variables to configure:
 - `APP_ENV` - Environment (development/staging/production)
 - `DB_HOST` - Database host
 - `DB_USER` - Database username
@@ -156,13 +145,6 @@ Key variables:
 - `DB_NAME` - Database name
 - `NGINX_PORT` - Nginx port
 - `PMA_PORT` - PHPMyAdmin port
-
-### Database Configuration
-
-The application uses MySQL with the following default:
-- Database Name: `hmisphp`
-- User: `hospital`
-- Password: `pramod2004` (Database)
 
 ## API Endpoints
 
