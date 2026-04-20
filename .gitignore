@@ -1,0 +1,124 @@
+# Git configuration for Hospital Management System
+
+# Dependencies
+composer.lock
+vendor/
+node_modules/
+npm-debug.log
+
+# Environment files
+.env
+.env.*.local
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.project
+.c9/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS
+*.DS_Store
+.AppleDouble
+.LSOverride
+*.log
+*.rar
+*.zip
+*.tar.gz
+
+# Build and distribution
+build/
+dist/
+coverage/
+.nyc_output/
+
+# Testing
+.phpunit.result.cache
+phpunit.log
+test-results/
+
+# Docker
+.dockerignore
+docker-compose*.local.yml
+docker-compose*.dev.yml
+
+# Jenkins
+.jenkinsfile.local
+
+# Temporary files
+tmp/
+temp/
+cache/
+*.tmp
+*.bak
+
+# Database
+*.sql.bak
+*.sql.gz
+database/backups/*
+
+# Logs
+logs/
+*.log
+npm-debug.log
+yarn-error.log
+
+# Documentation
+docs/_build/
+
+# Sensitive files
+.aws/credentials
+.aws/config
+ssh_keys/
+*.pem
+*.key
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains IDEs
+.idea/
+.gradle
+.gradle/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Node (if using Node tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
