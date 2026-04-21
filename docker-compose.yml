@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: hospital_app
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+    networks:
+      - hospital_network
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER:-hospital}
+      - DB_PASSWORD=${DB_PASSWORD:-pramod2004}
+      - DB_NAME=${DB_NAME:-hmisphp}
+
+  nginx:
+    image: nginx:alpine
+    container_name: hospital_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/app
+      - ./config/nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - app
+    networks:
+      - hospital_network
+
+  db:
+    image: mysql:8.0
+    container_name: hospital_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-pramod2004}
+      MYSQL_DATABASE: ${DB_NAME:-hmisphp}
+      MYSQL_USER: ${DB_USER:-hospital}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-pramod2004}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./DATABASE\ FILE/hmisphp.sql:/docker-entrypoint-initdb.d/01-hmisphp.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - hospital_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: hospital_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${DB_USER:-hospital}
+      PMA_PASSWORD: ${DB_PASSWORD:-pramod2004}
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - hospital_network
+
+networks:
+  hospital_network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
