@@ -1,15 +1,24 @@
 <?php
 	session_start();
 	include('assets/inc/config.php');
+	require_once('assets/inc/security.php');
 		if(isset($_POST['update_doc']))
 		{
 			$doc_fname=$_POST['doc_fname'];
 			$doc_lname=$_POST['doc_lname'];
 			$doc_number=$_GET['doc_number'];
             $doc_email=$_POST['doc_email'];
-            $doc_pwd=sha1(md5($_POST['doc_pwd']));
-            $doc_dpic=$_FILES["doc_dpic"]["name"];
-		    move_uploaded_file($_FILES["doc_dpic"]["tmp_name"],"../doc/assets/images/users/".$_FILES["doc_dpic"]["name"]);
+            // Use secure bcrypt hashing instead of SHA1(MD5)
+            $doc_pwd = hash_password($_POST['doc_pwd']);
+            
+            // Secure file upload handling
+            $doc_dpic = '';
+            if (isset($_FILES["doc_dpic"]) && $_FILES["doc_dpic"]["error"] == UPLOAD_ERR_OK) {
+                $upload = secure_file_upload('doc_dpic', '../doc/assets/images/users/', ['image/jpeg', 'image/png', 'image/gif'], 5242880);
+                if ($upload['success']) {
+                    $doc_dpic = $upload['filename'];
+                }
+            }
 
             //sql to insert captured values
 			$query="UPDATE his_docs SET doc_fname=?, doc_lname=?,  doc_email=?, doc_pwd=?, doc_dpic=? WHERE doc_number = ?";

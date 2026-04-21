@@ -1,6 +1,7 @@
 <?php
 	session_start();
 	include('assets/inc/config.php');
+	require_once('assets/inc/security.php');
 		if(isset($_POST['update_profile']))
 		{
 			$ad_fname=$_POST['ad_fname'];
@@ -8,8 +9,15 @@
 			$ad_id=$_SESSION['ad_id'];
             $ad_email=$_POST['ad_email'];
            // $doc_pwd=sha1(md5($_POST['doc_pwd']));
-            $ad_dpic=$_FILES["ad_dpic"]["name"];
-		    move_uploaded_file($_FILES["ad_dpic"]["tmp_name"],"assets/images/users/".$_FILES["ad_dpic"]["name"]);
+            
+            // Secure file upload handling
+            $ad_dpic = '';
+            if (isset($_FILES["ad_dpic"]) && $_FILES["ad_dpic"]["error"] == UPLOAD_ERR_OK) {
+                $upload = secure_file_upload('ad_dpic', 'assets/images/users/', ['image/jpeg', 'image/png', 'image/gif'], 5242880);
+                if ($upload['success']) {
+                    $ad_dpic = $upload['filename'];
+                }
+            }
 
             //sql to insert captured values
 			$query="UPDATE his_admin SET ad_fname=?, ad_lname=?,  ad_email=?, ad_dpic=? WHERE ad_id = ?";
@@ -35,7 +43,8 @@
         if(isset($_POST['update_pwd']))
 		{
             $ad_id=$_SESSION['ad_id'];
-            $ad_pwd=sha1(md5($_POST['ad_pwd']));//double encrypt 
+            // Use secure bcrypt hashing instead of SHA1(MD5)
+            $ad_pwd = hash_password($_POST['ad_pwd']);
             
             //sql to insert captured values
 			$query="UPDATE his_admin SET ad_pwd =? WHERE ad_id = ?";

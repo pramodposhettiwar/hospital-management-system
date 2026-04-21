@@ -28,4 +28,11 @@ if ($mysqli->connect_error) {
 
 // Set charset to utf8
 $mysqli->set_charset("utf8mb4");
+
+// Load security functions
+require_once dirname(__FILE__) . '/security.php';
+
+// Initialize security
+init_secure_session();
+set_security_headers();
 ?>
