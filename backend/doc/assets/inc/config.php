@@ -1,31 +1,35 @@
 <?php
-// Load environment variables from .env file if it exists
-$env_file = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/.env';
-if (file_exists($env_file)) {
-    $lines = file($env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
-            list($key, $value) = explode('=', $line, 2);
-            $_ENV[trim($key)] = trim($value);
-        }
-    }
-}
 
-// Database configuration
-$host = $_ENV['DB_HOST'] ?? 'localhost';
-$dbuser = $_ENV['DB_USER'] ?? 'root';
-$dbpass = $_ENV['DB_PASSWORD'] ?? '';
-$db = $_ENV['DB_NAME'] ?? 'hmisphp';
+// -----------------------------
+// Database configuration (Docker-safe)
+// -----------------------------
 
-// Create database connection with error handling
-$mysqli = new mysqli($host, $dbuser, $dbpass, $db);
+// Use environment variables first (BEST for Docker)
+$host = getenv('DB_HOST');
+$dbuser = getenv('DB_USER');
+$dbpass = getenv('DB_PASSWORD');
+$dbname = getenv('DB_NAME');
+
+// Fallbacks (local/dev safety)
+$host   = $host ?: 'mysql-db';
+$dbuser = $dbuser ?: 'root';
+$dbpass = $dbpass ?: 'root';
+$dbname = $dbname ?: 'hmisphp';
+
+// -----------------------------
+// Create connection
+// -----------------------------
+$mysqli = new mysqli($host, $dbuser, $dbpass, $dbname);
 
 // Check connection
 if ($mysqli->connect_error) {
     error_log("Database connection failed: " . $mysqli->connect_error);
-    die("Database connection failed. Please contact the administrator.");
+    die("Database connection failed. Please check Docker DB setup.");
 }
 
-// Set charset to utf8
+// -----------------------------
+// Charset (important for PHP apps)
+// -----------------------------
 $mysqli->set_charset("utf8mb4");
+
 ?>
